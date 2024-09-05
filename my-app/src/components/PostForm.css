@@ -1,0 +1,57 @@
+.post-form {
+  padding: 20px;
+  background-color: #ffffff; /* White background for a clean look */
+  border: 1px solid #e0e0e0; /* Light grey border */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  max-width: 600px; /* Limiting max-width for better layout */
+  margin: 20px auto; /* Centering the form */
+}
+
+.post-form h1 {
+  color: #333333; /* Dark grey heading for contrast */
+  font-size: 24px; /* Larger heading size */
+  margin-bottom: 20px; /* Space below the heading */
+}
+
+.post-form label {
+  display: block;
+  margin: 10px 0;
+  font-weight: 500; /* Slightly bold labels */
+  color: #333333; /* Dark grey text for readability */
+}
+
+.post-form input, .post-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  border: 1px solid #e0e0e0; /* Light grey border for inputs */
+  border-radius: 5px;
+  box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+.post-form input:focus, .post-form textarea:focus {
+  border-color: #4CAF50; /* Green border on focus */
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 3px rgba(76, 175, 80, 0.5); /* Green shadow on focus */
+}
+
+.post-form button {
+  background-color: #4CAF50; /* Green button background */
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px; /* Larger text for the button */
+  margin-top: 15px; /* Space above the button */
+}
+
+.post-form button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+.post-form button:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 3px rgba(76, 175, 80, 0.5); /* Green shadow on focus */
+}

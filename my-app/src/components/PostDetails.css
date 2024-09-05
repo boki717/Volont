@@ -1,0 +1,20 @@
+.post-detail {
+    padding: 20px;
+    background-color: #e8f5e9; /* Light green background */
+    border: 1px solid #4CAF50; /* Green border */
+    border-radius: 5px;
+  }
+  
+  .post-detail h1 {
+    color: #4CAF50; /* Green heading */
+  }
+  
+  .post-detail img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .post-detail p {
+    margin: 10px 0;
+  }
+  
