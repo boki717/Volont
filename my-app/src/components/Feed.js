@@ -22,7 +22,7 @@ const Feed = () => {
     try {
       // Ovde MOZDA moze da se doda čuvanje posta u bazu
       try {
-        const response = await api.get('/posts');
+        const response = await api.get('/posts/1');  // OVDE DA SE MENJA OVAJ BROJ NA OSNOVU STRANICE FEED-A NA KOJOJ JE KORISNIK U TOM TRENUTKU --------------------------------
         console.log('Load feed response:', response.data.length);
         removeAllPosts();
         for (let i = 0; i < response.data.length; i++)
