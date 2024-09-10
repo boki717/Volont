@@ -32,7 +32,7 @@ function App() {
 
 const ConditionalAppBar = () => {
   const location = useLocation();
-  const shouldShowAppBar = location.pathname.startsWith('/feed') || location.pathname.startsWith('/post/');
+  const shouldShowAppBar = location.pathname.startsWith('/feed') || location.pathname.startsWith('/post');
 
   return shouldShowAppBar ? <AppBar /> : null;
 };

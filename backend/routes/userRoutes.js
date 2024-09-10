@@ -1,8 +1,8 @@
 const express = require('express');
 const User = require('../models/User'); // Ensure this path is correct
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
-// const { JWT_SECRET } = 52830954;
+require('dotenv').config(); 
 
 // POST /register
 router.post('/register', async (req, res) => {
@@ -36,20 +36,17 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
-
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
-
-    const payload = { userId: user._id };
-    // const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ payload });  // treba token da se salje u stvari
+    const token = jwt.sign({ userId: user._id, isAdmin: user.admin },
+      process.env.JWT_SECRET, {expiresIn: "2h"});
+    res.json({ token });  // treba token da se salje u stvari
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: 'Server error' });

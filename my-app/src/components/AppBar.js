@@ -12,6 +12,7 @@ const AppBar = () => {
 
   const handleLogout = () => {
     // Perform any necessary logout logic here (e.g., clearing auth tokens)
+    localStorage.removeItem("loginToken");
     navigate('/'); // Redirect to home page
   };
 

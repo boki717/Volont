@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Post from './Post';
 import { usePosts } from '../PostContext';
 import { useEffect } from 'react';
+import NotLoggedIn from "./NotAllowed";
 import './Feed.css';
 import axios from 'axios';
 
@@ -14,11 +15,13 @@ const api = axios.create({
 
 
 const Feed = () => {
+  const token = localStorage.getItem("loginToken");
   const { posts, addPost, removeAllPosts } = usePosts(); // Retrieve posts from context
 
   // get posts
 
   const loadPosts = async () => {
+    if (!token) return;
     try {
       // Ovde MOZDA moze da se doda čuvanje posta u bazu
       try {
@@ -42,6 +45,12 @@ const Feed = () => {
   useEffect(() => {
     loadPosts();
   }, []);  
+
+  if (!token){
+    return(
+      <NotLoggedIn/>
+    );
+  }
 
   return (
     <div className="feed">

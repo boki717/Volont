@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePosts } from '../PostContext';
 import './PostForm.css';
+import NotLoggedIn from "./NotAllowed";
 import axios from 'axios';
 
 const api = axios.create({
@@ -10,6 +11,7 @@ const api = axios.create({
 });
 
 function PostForm() {
+  const token = localStorage.getItem("loginToken");
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
@@ -50,6 +52,12 @@ function PostForm() {
     setPhoto(null);
     setParticipants('');
   };
+
+  if (!token){
+    return(
+      <NotLoggedIn/>
+    );
+  }
 
   return (
     <div className="post-form">
