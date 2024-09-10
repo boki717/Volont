@@ -4,13 +4,6 @@ const User = require('../models/User'); // Ensure this path is correct
 const router = express.Router();
 // const { JWT_SECRET } = 52830954;
 
-
-router.get('/cu', (req, res) => {
-  res.send('Create a user');
-});
-
-
-
 // POST /register
 router.post('/register', async (req, res) => {
   try {
@@ -56,7 +49,7 @@ router.post('/login', async (req, res) => {
 
     const payload = { userId: user._id };
     // const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ payload });
+    res.json({ payload });  // treba token da se salje u stvari
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: 'Server error' });

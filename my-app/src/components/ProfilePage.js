@@ -7,7 +7,7 @@ const ProfilePage = () => {
     <div>
       <div className="profile-page">
         <h1>Username's events:</h1>
-        
+        <p> Sto bi dobro bilo da ovde neko nesto napravi</p>
       </div>
     </div>
   );

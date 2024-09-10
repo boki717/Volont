@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  admin: {
+    type: Number,
+    default: 0
+  }
 });
 
 UserSchema.pre('save', async function (next) {

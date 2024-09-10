@@ -5,10 +5,10 @@ const router = express.Router();
 // Get All Posts
 router.get('/posts/:page', async (req, res) => {
   const post_limit = 10;
-  const on_page = 1;
+  let on_page = 1;
   const pgstr = req.params.page
-  // if (/^\d+$/.test(pgstr)) on_page = parseInt(pgstr);
-  const posts = await Post.find({}).sort({date: -1}).skip(post_limit * (on_page - 1)).limit(post_limit);
+  if (/^\d+$/.test(pgstr)) on_page = parseInt(pgstr);
+  const posts = await Post.find({verified: {$ne: 0}}).sort({datePosted: -1}).skip(post_limit * (on_page - 1)).limit(post_limit);
   res.json(posts);
 });
 
