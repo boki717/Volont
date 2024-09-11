@@ -27,7 +27,19 @@
   margin-top: 5px;
   border: 1px solid #e0e0e0; /* Light grey border for inputs */
   border-radius: 5px;
-  box-sizing: border-box; /* Ensures padding is included in width */
+  box-sizing: border-box;
+  resize: none; /* Ensures padding is included in width */
+}
+
+.post-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  border: 1px solid #e0e0e0; /* Light grey border for inputs */
+  border-radius: 5px;
+  box-sizing: border-box;
+  resize: none; /* Ensures padding is included in width */
+  height: 150px;
 }
 
 .post-form input:focus, .post-form textarea:focus {

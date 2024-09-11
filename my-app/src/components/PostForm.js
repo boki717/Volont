@@ -75,7 +75,7 @@ function PostForm() {
         </label>
         <label>
           Description:
-          <textarea 
+          <textarea
             value={description} 
             onChange={(e) => setDescription(e.target.value)} 
             required 
