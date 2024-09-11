@@ -17,7 +17,7 @@ function App() {
     <Router>
       <PostProvider>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<><AppBar /><Feed /></>} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/feed" element={<><AppBar /><Feed /></>} />
