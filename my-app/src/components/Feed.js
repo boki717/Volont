@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Post from './Post';
 import { usePosts } from '../PostContext';
 import { useEffect } from 'react';
-import NotLoggedIn from "./NotAllowed";
 import './Feed.css';
 import axios from 'axios';
 
@@ -15,15 +14,14 @@ const api = axios.create({
 
 
 const Feed = () => {
-  const token = localStorage.getItem("loginToken");
+  const token = localStorage.getItem("loginToken"); // token je tu da bi posle mogao da se koristi za sta treba
   const { posts, addPost, removeAllPosts } = usePosts(); // Retrieve posts from context
+  const [ isOrg, setIsOrg ] = useState(0);
 
   // get posts
 
   const loadPosts = async () => {
-    if (!token) return;
     try {
-      // Ovde MOZDA moze da se doda čuvanje posta u bazu
       try {
         const response = await api.get('/posts/1');  // OVDE DA SE MENJA OVAJ BROJ NA OSNOVU STRANICE FEED-A NA KOJOJ JE KORISNIK U TOM TRENUTKU --------------------------------
         console.log('Load feed response:', response.data.length);
@@ -39,18 +37,27 @@ const Feed = () => {
     }
   };
 
+  const orgCheck = async () => {
+    try {
+      const authStr = "Bearer ".concat(token);
+      const response = await api.get('/admincheck', {headers: {Authorization: authStr}});
+      setIsOrg(response.data.isOrg);
+    } catch (err) {
+      console.log("error trying to get response for org check");
+    }
+  };
+
   // use addPost to add them to the posts list
   // don't forget to remove addPost from PostForm.js
 
   useEffect(() => {
-    loadPosts();
-  }, []);  
+    const fetchData = async () => {
+      await loadPosts();
+      await orgCheck();
+    }
+    fetchData();
+  }, []);
 
-  if (!token){
-    return(
-      <NotLoggedIn/>
-    );
-  }
 
   return (
     <div className="feed">
@@ -71,7 +78,7 @@ const Feed = () => {
       ) : (
         <p>No posts available.</p>
       )}
-      <Link to="/post-form" className="button">+</Link>
+      {isOrg === 1 ? (<Link to="/post-form" className="button">+</Link>) : <></>}
     </div>
   );
 };

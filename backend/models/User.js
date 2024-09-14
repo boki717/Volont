@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  admin: {
+  organization: {  // 1 means that user is an organization
     type: Number,
     default: 0
   }

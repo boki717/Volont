@@ -1,15 +1,8 @@
 import React from 'react';
 import './PostDetails.css'; // Ensure this matches your file name
-import NotLoggedIn from "./NotAllowed";
 
 const PostDetail = () => {
-  const token = localStorage.getItem("loginToken");
-  
-  if (!token){
-    return(
-      <NotLoggedIn/>
-    );
-  }
+  // const token = localStorage.getItem("loginToken");
 
   return (
     <div className="post-detail">

@@ -9,7 +9,7 @@ export default function NotLoggedIn(){
       };
     return (
         <>
-        <p>Morate se ulogovati kako bi pristupili ovoj stranici</p>
+        <p>Morate se ulogovati kao organizacija kako bi mogli da pristupite ovoj stranici</p>
         <form onSubmit={handleSubmit}>
             <button type="submit">Login</button>
         </form>

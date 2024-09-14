@@ -6,8 +6,7 @@ const PostSchema = new mongoose.Schema({
   datePosted: { type: Date, default: Date.now },
   description: { type: String, required: true },
   photo: { type: String },
-  participants: { type: Number, required: true },
-  verified: { type: Number, default: 0}
+  participants: { type: Number, required: true }
 });
 
 module.exports = mongoose.model('Post', PostSchema);
