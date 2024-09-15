@@ -9,6 +9,7 @@ const api = axios.create({
 });
 
 const RegisterPage = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -18,7 +19,7 @@ const RegisterPage = () => {
     e.preventDefault();
     if (password === confirmPassword) {
       try {
-        const response = await api.post('/register', { email, password, confirmPassword });
+        const response = await api.post('/register', { name, email, password, confirmPassword });
         console.log('Registration response:', response.data);
         alert(response.data.msg);
         navigate('/login');
@@ -37,6 +38,13 @@ const RegisterPage = () => {
     <div className="register-page">
       <img src="./logo.png" alt="logo" className="register-logo" />
       <form onSubmit={handleSubmit} className="register-form">
+      <input
+          type="text"
+          value={name}
+          placeholder="name"
+          onChange={(e) => setName(e.target.value)}
+          className="register-input"
+        />
         <input
           type="email"
           value={email}

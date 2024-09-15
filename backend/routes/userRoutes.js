@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../models/User'); // Ensure this path is correct
+const Post = require('../models/Post');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 require('dotenv').config(); 
@@ -7,8 +8,8 @@ require('dotenv').config();
 // POST /register
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, confirmPassword } = req.body;
-    if (!email || !password || !confirmPassword) {
+    const { name, email, password, confirmPassword } = req.body;
+    if (!name || !email || !password || !confirmPassword) {
       return res.status(400).json({ msg: 'All fields are required' });
     }
     if (password !== confirmPassword) {
@@ -18,7 +19,7 @@ router.post('/register', async (req, res) => {
     if (user) {
       return res.status(400).json({ msg: 'User already exists' });
     }
-    user = new User({ email, password });
+    user = new User({ name, email, password });
     await user.save();
     res.status(201).json({ msg: 'User registered successfully' });
   } catch (err) {
@@ -67,6 +68,54 @@ router.get("/admincheck", async (req, res) => {
       res.json({ isOrg: 0 });
     }
   }
-})
+});
+
+
+router.get("/getuser", async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token){
+    res.json({ userData: {} });
+  }
+  else{
+    try{
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      if (decoded.isOrg === 0){
+        const user = await User.findById(decoded.userId);
+        res.json({name: user.name, email: user.email});
+      }
+      else{
+        res.json({ userData: {} });
+      }
+    } catch (err){
+      res.json({ userData: {} });
+    }
+  }
+});
+
+// make a rout that will return all posts that user signed up for only based on token
+router.get('/userPosts', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token){
+    res.json({});
+  }
+  else{
+    try{
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      if (decoded.isOrg === 0){
+        const posts = [];
+        const user = await User.findById(decoded.userId);
+        for (const postId of user.events){
+          posts.push(await Post.findById(postId));
+        }
+        res.json(posts);
+      }
+      else{
+        res.json({});
+      }
+    } catch (err){
+      res.json({});
+    }
+  }
+});
 
 module.exports = router;

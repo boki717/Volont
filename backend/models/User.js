@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
   email: {
     type: String,
     required: true,
@@ -14,6 +18,10 @@ const UserSchema = new mongoose.Schema({
   organization: {  // 1 means that user is an organization
     type: Number,
     default: 0
+  },
+  events: {
+    type: Array,
+    deffault: []
   }
 });
 

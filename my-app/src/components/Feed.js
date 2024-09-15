@@ -14,7 +14,7 @@ const api = axios.create({
 
 
 const Feed = () => {
-  const token = localStorage.getItem("loginToken"); // token je tu da bi posle mogao da se koristi za sta treba
+  const token = localStorage.getItem("loginToken");
   const { posts, addPost, removeAllPosts } = usePosts(); // Retrieve posts from context
   const [ isOrg, setIsOrg ] = useState(0);
 
