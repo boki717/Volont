@@ -6,10 +6,12 @@ import AppBar from './components/AppBar';
 import Feed from './components/Feed';
 import PostForm from './components/PostForm';
 import PostDetail from './components/PostDetail';
+import PostDetailOrg from './components/PostDetailOrg';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import HomePage from './components/HomePage';
-import ProfilePage from './components/ProfilePage'; // Import ProfilePage
+import OrgPage from './components/OrgPage'; // Import ProfilePage
+import EditOrgPage from './components/EditOrgPage';
 import './App.css';
 
 function App() {
@@ -23,7 +25,9 @@ function App() {
           <Route path="/feed" element={<><AppBar /><Feed /></>} />
           <Route path="/post-form" element={<PostForm />} />
           <Route path="/post/:id" element={<><AppBar /><PostDetail /></>} />
-          <Route path="/profile" element={<><AppBar /><ProfilePage /></>} /> {/* Add route for ProfilePage */}
+          <Route path="/orgpost/:id" element={<PostDetailOrg />}/>
+          <Route path="/profile" element={<><AppBar /><OrgPage /></>} /> {/* Add route for ProfilePage */}
+          <Route path="/editorg" element={<><AppBar /><EditOrgPage /></>} />
         </Routes>
       </PostProvider>
     </Router>

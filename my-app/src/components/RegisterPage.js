@@ -41,7 +41,7 @@ const RegisterPage = () => {
       <input
           type="text"
           value={name}
-          placeholder="name"
+          placeholder="ime i prezime"
           onChange={(e) => setName(e.target.value)}
           className="register-input"
         />

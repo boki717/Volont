@@ -63,8 +63,8 @@ const Feed = () => {
     <div className="feed">
       {posts.length > 0 ? (
         posts.map((post) => (
-          <div key={post.id} className="post-item">
-            <Link to={`/post/${post.id}`} className="post-link">
+          <div key={post._id} className="post-item">
+            <Link to={`/post/${post._id}`} className="post-link">
               <Post
                 title={post.title}
                 date={post.date}

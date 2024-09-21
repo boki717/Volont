@@ -13,6 +13,23 @@ router.get('/posts/:page', async (req, res) => {
   res.json(posts);
 });
 
+// get one post
+router.get("/getpost/:id", async (req, res) => {
+  const post_id = req.params.id;
+  console.log(post_id);
+  const post = await Post.findById(post_id);
+  console.log(post);
+  res.json({
+    title: post.title,
+    date: post.date,
+    description: post.description,
+    participants: post.participants,
+    datePosted: post.datePosted,
+    waiting: post.waiting,
+    accepted: post.accepted
+  });
+});
+
 // Create a New Post
 router.post('/newpost', async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];

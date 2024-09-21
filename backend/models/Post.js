@@ -7,7 +7,8 @@ const PostSchema = new mongoose.Schema({
   description: { type: String, required: true },
   photo: { type: String },
   participants: { type: Number, required: true },
-  volunteers: { type: Array, default: []}
+  waiting: { type: Array, default: []},
+  accepted: { type: Array, default: []}
 });
 
 module.exports = mongoose.model('Post', PostSchema);

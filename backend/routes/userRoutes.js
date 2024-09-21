@@ -79,13 +79,13 @@ router.get("/getuser", async (req, res) => {
   else{
     try{
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      if (decoded.isOrg === 0){
-        const user = await User.findById(decoded.userId);
-        res.json({name: user.name, email: user.email});
-      }
-      else{
-        res.json({ userData: {} });
-      }
+      const user = await User.findById(decoded.userId);
+      res.json({
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        city: user.city,
+        description: user.description});
     } catch (err){
       res.json({ userData: {} });
     }
@@ -101,17 +101,12 @@ router.get('/userPosts', async (req, res) => {
   else{
     try{
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      if (decoded.isOrg === 0){
-        const posts = [];
-        const user = await User.findById(decoded.userId);
-        for (const postId of user.events){
-          posts.push(await Post.findById(postId));
-        }
-        res.json(posts);
+      const posts = [];
+      const user = await User.findById(decoded.userId);
+      for (const postId of user.events){
+        posts.push(await Post.findById(postId));
       }
-      else{
-        res.json({});
-      }
+      res.json(posts);
     } catch (err){
       res.json({});
     }

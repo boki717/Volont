@@ -9,11 +9,23 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
+    unique: true
   },
   password: {
     type: String,
     required: true,
+  },
+  phone: {
+    type: String,
+    default: ""
+  },
+  city: {
+    type: String,
+    default: ""
+  },
+  description: {
+    type: String,
+    default: "Volonter"
   },
   organization: {  // 1 means that user is an organization
     type: Number,
