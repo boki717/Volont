@@ -1,47 +1,50 @@
 // src/components/ProfilePage.js
 import React, { useState } from 'react';
 import  { useEffect }  from 'react';
-import './ProfilePage.css'; // Add styles as needed
+import './OrgPage.css'; // Add styles as needed
 import { Link } from 'react-router-dom';
-import Post from './Post';
+import Post from '../../comps/Post';
 import axios from 'axios';
-import NotLoggedIn from "./NotAllowed";
+import NotLoggedIn from "../../NotAllowed";
+import { useNavigate } from 'react-router-dom';
 
 const api = axios.create({
   baseURL: 'http://localhost:5000/api',
   timeout: 5000,
 });
 
-const ProfilePage = () => {
+const OrgPage = () => {
   const token = localStorage.getItem("loginToken");
-  const [thisUser, setThisUser] = useState({"name": "x", "email": "x"});
+  const [thisUser, setThisUser] = useState({
+    "_id": "x",
+    "name": "x",
+    "email": "x",
+    "phone": "x",
+    "city": "x",
+    "description": "x"});
   const [userPosts, setUserPosts] = useState({});
+  const navigate = useNavigate();
 
   const getUserData = async () => {
     try {
       const authStr = "Bearer ".concat(token);
-      const response = await api.get('/getuser', {headers: {Authorization: authStr}});
-      setThisUser(response.data);
+      const resp1 = await api.get('/getloggedinuser', {headers: {Authorization: authStr}});
+      setThisUser(resp1.data);
+      const resp2 = await api.get(`/getUserPosts/${resp1.data._id}`);
+      setUserPosts(resp2.data);
     } catch (err) {
       console.log("error trying to get user data");
     }
   };
 
-  const getUserPosts = async () => {
-    try{
-      const authStr = "Bearer ".concat(token);
-      const response = await api.get('/userPosts', {headers: {Authorization: authStr}});
-      setUserPosts(response.data);
-    }
-    catch (err){
-      console.log("error trying to get user events");
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    navigate('/editorg');
   };
 
   useEffect(() => {
     const fetchData = async () => {
       await getUserData();
-      await getUserPosts();
     }
     fetchData();
   }, []);
@@ -49,14 +52,19 @@ const ProfilePage = () => {
   return (
     (token) ? (
     <div className="profile-page">
-      <p>NEKO DA DIZAJNIRA OVO I DA SE DODA PROFILNA MOZDA</p>
+      <form onSubmit={handleSubmit}>
+        <button type="submit">edituj profil</button>
+      </form>
       <p>{ thisUser.name }</p>
+      <p>{ thisUser.city }</p>
+      <p>{ thisUser.description }</p>
       <p>{ thisUser.email }</p>
+      <p>{ thisUser.phone }</p>
       <h1>events:</h1>
       {userPosts.length > 0 ? (
         userPosts.map((post) => (
           <div key={post.id} className="post-item">
-            <Link to={`/post/${post.id}`} className="post-link">
+            <Link to={`/orgpost/${post._id}`} className="post-link">
               <Post
                 title={post.title}
                 date={post.date}
@@ -74,4 +82,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default OrgPage;

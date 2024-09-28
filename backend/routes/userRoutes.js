@@ -1,9 +1,14 @@
 const express = require('express');
 const User = require('../models/User'); // Ensure this path is correct
 const Post = require('../models/Post');
+const PostUser = require('../models/PostUser');
 const jwt = require('jsonwebtoken');
+const { tokenCheck } = require("./functions");
+require('dotenv').config();
+
+
 const router = express.Router();
-require('dotenv').config(); 
+
 
 // POST /register
 router.post('/register', async (req, res) => {
@@ -50,66 +55,49 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get("/admincheck", async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token){
-    res.json({ isOrg: 0 });
-  }
-  else{
-    try{
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      if (decoded.isOrg === 1){
-        res.json({ isOrg: 1});
-      }
-      else{
-        res.json({ isOrg: 0 });
-      }
-    } catch (err){
-      res.json({ isOrg: 0 });
-    }
+router.get("/orgcheck", async (req, res) => {
+  const decoded = tokenCheck(req, res, { isOrg: 0});
+  if (decoded){
+    res.json({ isOrg: 1});
   }
 });
 
 
-router.get("/getuser", async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token){
-    res.json({ userData: {} });
-  }
-  else{
-    try{
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await User.findById(decoded.userId);
-      res.json({
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        city: user.city,
-        description: user.description});
-    } catch (err){
-      res.json({ userData: {} });
-    }
+router.get("/isloggedin", async (req, res) => {
+  const decoded = tokenCheck(req, res, { isin: 0});
+  if (decoded){
+    res.json({ isin: 1});
   }
 });
+
+router.get("/getloggedinuser", async (req, res) => {
+  const decoded = tokenCheck(req, res, { userData: {} });
+  if (decoded){
+    const user = await User.findById(decoded.userId);
+    res.json(user);
+  }
+});
+
+router.get("/getuser/:id", async (req, res) => {
+  const user_id = req.params.id;
+  const user = await User.findById(user_id);
+  res.json(user);
+});
+
 
 // make a rout that will return all posts that user signed up for only based on token
-router.get('/userPosts', async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token){
-    res.json({});
+router.get('/getUserPosts/:id', async (req, res) => {
+  const user_id = req.params.id;
+  if (user_id.length != 24){
+    res.json([]);
   }
   else{
-    try{
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const posts = [];
-      const user = await User.findById(decoded.userId);
-      for (const postId of user.events){
-        posts.push(await Post.findById(postId));
-      }
-      res.json(posts);
-    } catch (err){
-      res.json({});
+    const posts = [];
+    const user = await User.findById(user_id);
+    for (const postId of user.events){
+      posts.push(await Post.findById(postId));
     }
+    res.json(posts);
   }
 });
 

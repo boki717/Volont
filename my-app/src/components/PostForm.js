@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { usePosts } from '../PostContext';
 import { useEffect } from 'react';
+import { isOrgCheck } from './functions';
 import './PostForm.css';
 import NotLoggedIn from "./NotAllowed";
 import axios from 'axios';
@@ -19,19 +19,7 @@ function PostForm() {
   const [photo, setPhoto] = useState(null);
   const [participants, setParticipants] = useState('');
   const navigate = useNavigate();
-  const { addPost } = usePosts();
   const [ isOrg, setIsOrg ] = useState(0);
-
-  const orgCheck = async () => {
-    try {
-      console.log(token);
-      const authStr = "Bearer ".concat(token);
-      const response = await api.get('/admincheck', {headers: {Authorization: authStr}});
-      setIsOrg(response.data.isOrg);
-    } catch (err) {
-      console.log("error trying to get response for org check");
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,35 +30,20 @@ function PostForm() {
       photo: photo ? URL.createObjectURL(photo) : null,
       participants,
     };
-
     try {
-      // Ovde MOZDA moze da se doda čuvanje posta u bazu
-      try {
-        const authStr = "Bearer ".concat(token);
-        console.log(token);
-        const response = await api.post('/newpost', newPost, {headers: {Authorization: authStr}});
-        console.log('New post response:', response.data);
-        await addPost(newPost); // Assuming addPost returns a promise
-        navigate('/feed');
-      } catch (err) {
-        console.error('New post error:', err);
-        alert('New post error');
-      }
+      const authStr = "Bearer ".concat(token);
+      const response = await api.post('/newpost', newPost, {headers: {Authorization: authStr}});
+      console.log('New post response:', response.data);
+      navigate('/feed');
     } catch (err) {
-      alert('Error adding post'); // Show an error message
+      console.error('New post error:', err);
+      alert('New post error');
     }
-
-    // Optionally reset the form
-    setTitle('');
-    setDate('');
-    setDescription('');
-    setPhoto(null);
-    setParticipants('');
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      await orgCheck();
+      await isOrgCheck(setIsOrg);
     }
     fetchData();
   }, []);

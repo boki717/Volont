@@ -1,9 +1,9 @@
 // src/components/ProfilePage.js
 import React, { useState } from 'react';
 import  { useEffect }  from 'react';
-import './ProfilePage.css'; // Add styles as needed
+import './OrgPage.css'; // Add styles as needed
 import axios from 'axios';
-import NotLoggedIn from "./NotAllowed";
+import NotLoggedIn from "../../NotAllowed";
 
 const api = axios.create({
   baseURL: 'http://localhost:5000/api',
@@ -22,7 +22,7 @@ const ProfilePage = () => {
   const getUserData = async () => {
     try {
       const authStr = "Bearer ".concat(token);
-      const response = await api.get('/getuser', {headers: {Authorization: authStr}});
+      const response = await api.get('/getloggedinuser', {headers: {Authorization: authStr}});
       setThisUser(response.data);
     } catch (err) {
       console.log("error trying to get user data");

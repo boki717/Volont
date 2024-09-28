@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Post from './Post';
-import { usePosts } from '../PostContext';
 import { useEffect } from 'react';
+import { isOrgCheck } from './functions';
+import Post from './comps/Post';
 import './Feed.css';
 import axios from 'axios';
 
@@ -14,36 +14,16 @@ const api = axios.create({
 
 
 const Feed = () => {
-  const token = localStorage.getItem("loginToken");
-  const { posts, addPost, removeAllPosts } = usePosts(); // Retrieve posts from context
   const [ isOrg, setIsOrg ] = useState(0);
+  const [ posts, setPosts ] = useState([]);
 
   // get posts
-
   const loadPosts = async () => {
     try {
-      try {
-        const response = await api.get('/posts/1');  // OVDE DA SE MENJA OVAJ BROJ NA OSNOVU STRANICE FEED-A NA KOJOJ JE KORISNIK U TOM TRENUTKU --------------------------------
-        console.log('Load feed response:', response.data.length);
-        removeAllPosts();
-        for (let i = 0; i < response.data.length; i++)
-          await addPost(response.data[i]); // Assuming addPost returns a promise
-      } catch (err) {
-        console.error('Load feed error:', err);
-        alert('Load feed error');
-      }
+      const response = await api.get('/posts/1');
+      setPosts(response.data);
     } catch (err) {
       alert('Error loading feed'); // Show an error message
-    }
-  };
-
-  const orgCheck = async () => {
-    try {
-      const authStr = "Bearer ".concat(token);
-      const response = await api.get('/admincheck', {headers: {Authorization: authStr}});
-      setIsOrg(response.data.isOrg);
-    } catch (err) {
-      console.log("error trying to get response for org check");
     }
   };
 
@@ -53,7 +33,7 @@ const Feed = () => {
   useEffect(() => {
     const fetchData = async () => {
       await loadPosts();
-      await orgCheck();
+      await isOrgCheck(setIsOrg);
     }
     fetchData();
   }, []);

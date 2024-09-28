@@ -1,8 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors'); // Import cors
-const usersRoutes = require('./routes/userRoutes');
-const postRoutes = require('./routes/posts');
+const userRoutes = require('./routes/userRoutes');
+const postRoutes = require('./routes/postRoutes');
+const userPostRoutes = require('./routes/userPostRoutes');
 
 const app = express();
 const PORT = 5000;
@@ -33,8 +34,9 @@ app.get('/', (req, res) => {
 });
 
 // Use API routes
-app.use('/api', usersRoutes);
+app.use('/api', userRoutes);
 app.use('/api', postRoutes);
+app.use('/api', userPostRoutes);
 
 
 app.listen(PORT, () => {
