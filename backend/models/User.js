@@ -34,6 +34,10 @@ const UserSchema = new mongoose.Schema({
   events: {
     type: Array,
     deffault: []
+  },
+  photo: {
+    type: String,
+    default: null
   }
 });
 

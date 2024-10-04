@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors'); // Import cors
+const multer = require('multer');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
 const userPostRoutes = require('./routes/userPostRoutes');
@@ -32,6 +33,9 @@ connectDB();
 app.get('/', (req, res) => {
   res.send('Server is up and running');
 });
+
+// Serve static files from the "uploads" directory
+app.use('/uploads', express.static('uploads'));
 
 // Use API routes
 app.use('/api', userRoutes);

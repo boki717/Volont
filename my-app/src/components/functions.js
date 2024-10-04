@@ -8,7 +8,6 @@ const api = axios.create({
 export async function isOrgCheck(setterFunc){
     const token = localStorage.getItem("loginToken");
     try {
-        console.log(token);
         const authStr = "Bearer ".concat(token);
         const response = await api.get('/orgcheck', {headers: {Authorization: authStr}});
         setterFunc(response.data.isOrg);

@@ -5,7 +5,7 @@ const PostSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
   datePosted: { type: Date, default: Date.now },
   description: { type: String, required: true },
-  photo: { type: String },
+  photos: { type: Array, default: [] },
   participants: { type: Number, required: true }
 });
 

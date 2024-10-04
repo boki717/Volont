@@ -13,6 +13,7 @@ const api = axios.create({
 const ProfilePage = () => {
   const token = localStorage.getItem("loginToken");
   const [thisUser, setThisUser] = useState({
+    "photo": null,
     "name": "x",
     "email": "x",
     "phone": "x",
@@ -45,6 +46,11 @@ const ProfilePage = () => {
     (token) ? (
     <div className="profile-page">
       <form onSubmit={handleSubmit}>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setThisUser(thisUser)}  // e.target.files[0]
+        />
         <label>
           Ime i Prezime:
           <input 

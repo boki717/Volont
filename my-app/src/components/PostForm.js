@@ -16,24 +16,25 @@ function PostForm() {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
-  const [photo, setPhoto] = useState(null);
+  const [photos, setPhotos] = useState(null);
   const [participants, setParticipants] = useState('');
   const navigate = useNavigate();
   const [ isOrg, setIsOrg ] = useState(0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newPost = {
-      title,
-      date,
-      description,
-      photo: photo ? URL.createObjectURL(photo) : null,
-      participants,
-    };
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("date", date);
+    formData.append("description", description);
+    formData.append("participants", participants);
+    // const pictureFiles = e.target.files;
+    for (let i = 0; i < photos.length; i++){
+      formData.append("photos", photos[i]);
+    }
     try {
       const authStr = "Bearer ".concat(token);
-      const response = await api.post('/newpost', newPost, {headers: {Authorization: authStr}});
-      console.log('New post response:', response.data);
+      const response = await api.post('/newpost', formData, {headers: {Authorization: authStr}});
       navigate('/feed');
     } catch (err) {
       console.error('New post error:', err);
@@ -81,10 +82,10 @@ function PostForm() {
         </label>
         <label>
           Add a Photo:
-          <input 
-            type="file" 
+          <input
+            type="file" multiple
             accept="image/*"
-            onChange={(e) => setPhoto(e.target.files[0])} 
+            onChange={(e) => setPhotos(e.target.files)} 
           />
         </label>
         <label>
