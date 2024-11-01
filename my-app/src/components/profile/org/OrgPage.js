@@ -53,15 +53,46 @@ const OrgPage = () => {
   return (
     (token) ? (
     <div className="profile-page">
-      <img src={thisUser.photo ? `http://localhost:5000/${thisUser.photo}` : null} alt="Profile Picture"/>
+      <div className='slikaime'> 
+      <img src={thisUser.photo ? `http://localhost:5000/${thisUser.photo}` : null} alt="Profile Picture" className='slika'/>
+      </div>  
+      <div className='telo' div>
+      <label htmlFor="name" style={{ fontWeight: 'bold' }} label>
+       Korisnicko ime
+       </label>
+       <div className='ime' div> 
+      {thisUser.name }
+      </div>
+      <label htmlFor="name" style={{ fontWeight: 'bold' }} label>
+        Status
+      </label>  
+      <div className='status' div>
+      { thisUser.description }
+      </div> 
+      <label htmlFor="name" style={{ fontWeight: 'bold' }} label>
+        Grad
+      </label>
+      <div className='grad'div>
+      { thisUser.city }<label label>XXXX</label>
+      </div>     
+      <label htmlFor="name" style={{ fontWeight: 'bold' }} label>
+        Email
+      </label>   
+      <div className='email' div>
+      { thisUser.email }
+      </div>
+      <label htmlFor="name" style={{ fontWeight: 'bold' }} label>
+        Broj telefona
+      </label>
+      <div className='broj'div>
+        <label label>XXXXX</label>
+      { thisUser.phone }
+      </div>
       <form onSubmit={handleSubmit}>
-        <button type="submit">edituj profil</button>
+        <button type="submit" className='dugmeedit' >edituj profil</button> 
       </form>
-      <p>{ thisUser.name }</p>
-      <p>{ thisUser.city }</p>
-      <p>{ thisUser.description }</p>
-      <p>{ thisUser.email }</p>
-      <p>{ thisUser.phone }</p>
+      </div>
+
       <h1>events:</h1>
       {userPosts.length > 0 ? (
         userPosts.map((post) => (

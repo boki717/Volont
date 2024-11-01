@@ -5,17 +5,31 @@ import './Post.css'; // Add any styles you need
 const Post = ({ title, date, description, photos, participants }) => {
   return (
     <div className="post">
-      <h2>{title}</h2>
-      <p>{new Date(date).toLocaleDateString()}</p>
-      <p>{description}</p>
-      {photos.length > 0 ? (
-        photos.map((photo) => (
-          <img src={photo ? `http://localhost:5000/${photo}` : null} alt="Photo"/>
-        ))
-      ) : (
-        <p>No photos available.</p>
-      )}
-      <p>Participants Needed: {participants}</p>
+      <div className="header">
+        <h2>{title}</h2>
+      </div>
+      <div className="images">
+        {photos.length > 0 ? (
+          <img
+            src={photos[0] ? `http://localhost:5000/${photos[0]}` : null}
+            alt="First Photo"
+          />
+        ) : (
+          <p>No photos available.</p>
+        )}
+      </div>
+      <div className="footer">
+        <div className='icons'>
+          <div>📍</div>
+          <div>📅</div>
+          <div>👤</div>
+        </div>
+        <div className='info'>
+            <div>lokacija</div>
+            <div>{new Date(date).toLocaleDateString()}</div>
+            <div>Broj potrebnih volontera: {participants}</div>
+        </div>
+      </div>
     </div>
   );
 };

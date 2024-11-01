@@ -2,10 +2,11 @@
   padding: 20px;
   background-color: #ffffff; /* White background for a clean look */
   border: 1px solid #e0e0e0; /* Light grey border */
-  border-radius: 10px;
+  border-radius: 25px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  max-width: 600px; /* Limiting max-width for better layout */
+  max-width: 1000px; /* Limiting max-width for better layout */
   margin: 20px auto; /* Centering the form */
+  height: 700px; /* Povećana visina textarea *
 }
 
 .post-form h1 {
@@ -14,11 +15,31 @@
   margin-bottom: 20px; /* Space below the heading */
 }
 
+.post-form .logoitekst{
+display: flex;
+justify-content: space-between;
+}
+.post-form .logoitekst .logo{
+  max-width: 150px;
+  max-height: 150px;
+  
+  
+  }
+.post-form .header{
+  display: flex;
+  gap: 50px
+}
+
+
 .post-form label {
   display: block;
   margin: 10px 0;
   font-weight: 500; /* Slightly bold labels */
   color: #333333; /* Dark grey text for readability */
+}
+.post-form .header .participansinput {
+ max-width: 250px;
+
 }
 
 .post-form input, .post-form textarea {
@@ -26,8 +47,19 @@
   padding: 12px;
   margin-top: 5px;
   border: 1px solid #e0e0e0; /* Light grey border for inputs */
-  border-radius: 5px;
+  border-radius: 25px;
   box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+.post-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  border: 1px solid #e0e0e0; /* Light grey border for inputs */
+  border-radius: 25px;
+  box-sizing: border-box;
+  resize: none; /* Ensures padding is included in width */
+  height: 150px;
 }
 
 .post-form input:focus, .post-form textarea:focus {
@@ -41,17 +73,30 @@
   color: white;
   padding: 12px;
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
   cursor: pointer;
   font-size: 16px; /* Larger text for the button */
   margin-top: 15px; /* Space above the button */
+  transition: transform 0.3s ease; /* Glatka tranzicija */
 }
 
 .post-form button:hover {
-  background-color: #45a049; /* Darker green on hover */
+  transform: scale(1.07); /* Povećanje za 20% */
+}
+.post-form button:hover {
+  background-color: #3a913e; /* Darker green on hover */
 }
 
 .post-form button:focus {
   outline: none; /* Remove default outline */
   box-shadow: 0 0 3px rgba(76, 175, 80, 0.5); /* Green shadow on focus */
+}
+
+@media (max-width:768px){
+  .post-form .header{
+    display: list-item;
+  }
+  .post-form {
+    height: 1000px;
+  }
 }

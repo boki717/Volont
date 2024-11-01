@@ -58,7 +58,7 @@ router.post('/login', async (req, res) => {
 router.get("/orgcheck", async (req, res) => {
   const decoded = tokenCheck(req, res, { isOrg: 0});
   if (decoded){
-    res.json({ isOrg: 1});
+    res.json({ isOrg: decoded.isOrg});
   }
 });
 

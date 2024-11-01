@@ -1,45 +1,80 @@
-
-.post-link {
-  text-decoration: none; /* Remove underline */
-  color: inherit; /* Inherit color from parent element */
-}
-
+/* Veći i lepši postovi */
 .post {
-  border: 1px solid #ddd;
-  border-radius: 12px; /* Rounded corners */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  padding: 15px;
-  margin-bottom: 20px;
-  background-color: #fff; /* White background */
-  display: flex;
-  flex-direction: column;
+  border: none; /* Uklonjen okvir za čistiji izgled */
+  border-radius: 16px; /* Veće zaobljene ivice */
+  padding: 25px;
+  background-color: white;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); /* Dublja senka za premium osećaj */
+  transition-duration: 0.3s;
+  animation: autoShowScroll;
+  animation-timeline: view(80% 2%);
 }
 
-.post img {
-  width: 100%; /* Full width image */
-  max-height: 200px; /* Fixed height */
-  object-fit: cover; /* Ensure image covers the space without distortion */
-  border-radius: 8px; /* Rounded corners for images */
-  margin-bottom: 10px;
+.post:hover {
+  transform: translateY(-12px); /* Veći podizanje na hover */
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15); /* Jača senka na hover */
 }
 
-.post h2 {
-  font-size: 1.5em;
+a {
+  text-decoration: none;
+  color: inherit; /* Zadržava boje elemenata */
+}
+
+.header h2 {
   margin: 0;
-  color: #333; /* Dark gray text */
+  font-size: 1.4rem; /* Veći naslov */
+  color: #333; /* Srednje tamna za fokus */
+  text-transform: uppercase;
+  text-align: center;
 }
 
-.post p {
-  margin: 5px 0;
-  color: #666; /* Light gray text */
+.images {
+  width: 100%;
+  padding-top: 80%; /* 16:9 odnos stranica */
+  position: relative;
+  margin-bottom: 20px; /* Veći razmak ispod slike */
 }
 
-.post .date {
-  font-size: 0.9em;
-  color: #999; /* Even lighter gray for date */
+.images img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Slika popunjava ceo prostor */
+  border-radius: 12px; /* Zaobljene ivice slike */
 }
 
-.post .participants {
-  font-weight: bold;
-  color: #4CAF50; /* Green for participants text */
+.footer {
+  display: flex;
+  font-size: 1rem; /* Veći i čitljiviji font */
+  color: #495057; /* Neutralno siva */
+  
+}
+
+.footer .icons div{
+  padding-bottom: 5px;
+  padding-top: 5px;
+  text-align: center;
+}
+.footer .info div{
+  padding-bottom: 5px;
+  padding-top: 6px;
+  height: 21px;
+  justify-content: center;
+  padding-left: 7px;
+}
+
+.footer .volunteers {
+  color: #495057;
+}
+@keyframes autoShowScroll {
+  from{
+opacity: 0;
+transform: translateY(200px) scale(0.3);
+  }to{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+
+  }
 }

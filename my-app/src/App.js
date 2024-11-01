@@ -12,6 +12,7 @@ import HomePage from './components/logreg/HomePage';
 import OrgPage from './components/profile/org/OrgPage'; // Import ProfilePage
 import EditOrgPage from './components/profile/org/EditOrgPage';
 import './App.css';
+import BottomBar from './components/BottomBar';
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/feed" element={<><AppBar /><Feed /></>} />
+        <Route path="/feed" element={<><AppBar /><Feed /><BottomBar/></>} />
         <Route path="/post-form" element={<PostForm />} />
         <Route path="/post/:id" element={<><AppBar /><PostDetail /></>} />
         <Route path="/orgpost/:id" element={<PostDetailOrg />}/>

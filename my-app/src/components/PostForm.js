@@ -6,6 +6,7 @@ import './PostForm.css';
 import NotLoggedIn from "./NotAllowed";
 import axios from 'axios';
 
+
 const api = axios.create({
   baseURL: 'http://localhost:5000/api',
   timeout: 5000,
@@ -18,6 +19,7 @@ function PostForm() {
   const [description, setDescription] = useState('');
   const [photos, setPhotos] = useState(null);
   const [participants, setParticipants] = useState('');
+  const [location, setLocation] = useState('');
   const navigate = useNavigate();
   const [ isOrg, setIsOrg ] = useState(0);
 
@@ -28,6 +30,7 @@ function PostForm() {
     formData.append("date", date);
     formData.append("description", description);
     formData.append("participants", participants);
+    formData.append("location", location);
     // const pictureFiles = e.target.files;
     for (let i = 0; i < photos.length; i++){
       formData.append("photos", photos[i]);
@@ -52,8 +55,12 @@ function PostForm() {
   return (
     (isOrg === 1) ? (
     <div className="post-form">
+      <div className='logoitekst'>
       <h1>Add New Post</h1>
+      <img src='./logo.png' alt="Logo" className="logo" /> {/* Dodaj logo ovde */}
+      </div>
       <form onSubmit={handleSubmit}>
+        <div className='header'>
         <label>
           Title:
           <input 
@@ -72,6 +79,16 @@ function PostForm() {
             required 
           />
         </label>
+        <label className='participansinput'>
+          Participants Needed:
+          <input 
+            type="number" 
+            value={participants} 
+            onChange={(e) => setParticipants(e.target.value)} 
+            required 
+          />
+        </label>
+        </div>
         <label>
           Description:
           <textarea 
@@ -88,12 +105,12 @@ function PostForm() {
             onChange={(e) => setPhotos(e.target.files)} 
           />
         </label>
-        <label>
-          Participants Needed:
+        <label style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 500, fontSize: '16px', color: '#333' }}>
+          Location:
           <input 
-            type="number" 
-            value={participants} 
-            onChange={(e) => setParticipants(e.target.value)} 
+            type="text" 
+            value={location} 
+            onChange={(e) => setLocation(e.target.value)} 
             required 
           />
         </label>

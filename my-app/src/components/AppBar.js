@@ -27,7 +27,7 @@ const AppBar = () => {
   return (
     <div className="app-bar">
       <div className="logo">
-        <img src="./logo.png" alt="logo" className='logo1'/>
+      <img src="./logo.png" alt="logo" onClick={handleHomeClick} className='logo1'/>
       </div>
       <div className="title">Volontiraj</div>
       <div className="profile" onClick={handleProfileClick}>

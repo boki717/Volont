@@ -1,6 +1,12 @@
 .feed {
   padding: 20px;
   background-color: #f0f4f0; /* Light green background */
+  display: grid;
+  grid-template-columns: repeat(3, 350px); /* 3 kolone sa fiksnom širinom od 350px */
+  gap: 20px; /* Razmak između kartica */
+  justify-content: center; /* Centriranje kartica horizontalno */
+  padding: 20px;
+  font-weight: bo;
 
 }.button {
   position: fixed;
@@ -25,15 +31,17 @@
 }
 
 
-.post {
-  border: 1px solid #4CAF50; /* Green border */
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 10px;
-  background-color: white;
-}
-
 .feed .post h2 {
   color: #4CAF50; /* Green title */
 }
 
+@media (max-width: 1135px) {
+  .feed {
+    grid-template-columns: repeat(2,350px); /* Jedan post po redu na manjim ekranima */
+  }
+}
+@media (max-width: 768px) {
+  .feed {
+    grid-template-columns: 1fr; /* Jedan post po redu na manjim ekranima */
+  }
+}
