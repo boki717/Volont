@@ -97,6 +97,7 @@ router.get('/getUserPosts/:id', async (req, res) => {
     for (const postId of user.events){
       posts.push(await Post.findById(postId));
     }
+    posts.reverse();
     res.json(posts);
   }
 });

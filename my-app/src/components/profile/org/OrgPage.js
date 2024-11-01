@@ -73,7 +73,7 @@ const OrgPage = () => {
         Grad
       </label>
       <div className='grad'div>
-      { thisUser.city }<label label>XXXX</label>
+      { thisUser.city }
       </div>     
       <label htmlFor="name" style={{ fontWeight: 'bold' }} label>
         Email
@@ -85,7 +85,6 @@ const OrgPage = () => {
         Broj telefona
       </label>
       <div className='broj'div>
-        <label label>XXXXX</label>
       { thisUser.phone }
       </div>
       <form onSubmit={handleSubmit}>

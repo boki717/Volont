@@ -53,4 +53,31 @@ router.get("/getpostswithstatus", async (req, res) => {
   }
 });
 
+
+router.post("/postuserchangestate", async (req, res) => {
+  const post_id = req.body.post_id;
+  const newStatus = req.body.new_status;
+  const decoded = tokenCheck(req, res, {});
+  if (decoded){
+    const exists = await PostUser.findOne({postId: post_id, userId: decoded.userId});
+    if (exists){
+      const updatedDocument = await PostUser.findOneAndUpdate(
+        {postId: post_id, userId: decoded.userId}, // Query to match document
+        {$set: {status: newStatus}},              // Update operation
+        {new: true, runValidators: true}                       // Options: return updated doc and run validation
+      );
+      if (!updatedDocument){
+        return res.status(404).json('Failed to find and update');
+      }
+      res.status(200).json("Updated");
+    }
+    else{
+      res.status(404).json("Document doesn't exist");
+    }
+  }
+  else{
+    res.status(401).json("No logged in user");
+  }
+});
+
 module.exports = router;
