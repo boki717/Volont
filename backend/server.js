@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors'); // Import cors
-const multer = require('multer');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
 const userPostRoutes = require('./routes/userPostRoutes');
@@ -41,7 +40,6 @@ app.use('/uploads', express.static('uploads'));
 app.use('/api', userRoutes);
 app.use('/api', postRoutes);
 app.use('/api', userPostRoutes);
-
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

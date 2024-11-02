@@ -30,8 +30,24 @@ const ProfilePage = () => {
     }
   };
 
+  const updateUser = async (param, val) => {
+    setThisUser((prevUser) => ({...prevUser, [param]: val}));
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try{
+      const formData = new FormData();
+      for (const key in thisUser) {
+        formData.append(key, thisUser[key]);
+      }
+      const authStr = "Bearer ".concat(token);
+      const response = await api.put('/updateUser', formData, {headers: {Authorization: authStr}});
+      console.log(response);
+    }
+    catch (err){
+      console.log(err);
+    }
     console.log("changes submitted");
   };
 
@@ -49,15 +65,15 @@ const ProfilePage = () => {
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => setThisUser(thisUser)}  // e.target.files[0]
+          onChange={(e) => updateUser("photo", e.target.files[0])}
         />
         <label>
           Ime i Prezime:
           <input 
             type="text" 
-            value={thisUser.name} 
-            onChange={(e) => setThisUser(thisUser)} 
-            required 
+            value={thisUser.name}
+            onChange={(e) => updateUser("name", e.target.value)}
+            required
           />
         </label>
         <label>
@@ -65,7 +81,7 @@ const ProfilePage = () => {
           <input
             type="text" 
             value={thisUser.city} 
-            onChange={(e) => setThisUser(thisUser)} 
+            onChange={(e) => updateUser("city", e.target.value)}
             required 
           />
         </label>
@@ -73,8 +89,8 @@ const ProfilePage = () => {
           Description:
           <textarea 
             value={thisUser.description} 
-            onChange={(e) => setThisUser(thisUser)} 
-            required 
+            onChange={(e) => updateUser("description", e.target.value)} 
+            required
           />
         </label>
         <label>
@@ -82,8 +98,8 @@ const ProfilePage = () => {
           <input 
             type="text" 
             value={thisUser.email} 
-            onChange={(e) => setThisUser(thisUser)} 
-            required 
+            onChange={(e) => updateUser("email", e.target.value)} 
+            required
           />
         </label>
         <label>
@@ -91,8 +107,8 @@ const ProfilePage = () => {
           <input 
             type="text" 
             value={thisUser.phone} 
-            onChange={(e) => setThisUser(thisUser)} 
-            required 
+            onChange={(e) => updateUser("phone", e.target.value)} 
+            required
           />
         </label>
         <button type="submit">Sacuvaj promene</button>

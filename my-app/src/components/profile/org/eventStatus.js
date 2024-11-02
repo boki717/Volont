@@ -59,21 +59,25 @@ const PostDetailOrg = () => {
 
   const acceptVolonter = async (e) => {
     e.preventDefault();
+    window.location.reload();
     changeStatus(3);
   };
 
   const rejectVolonter = async (e) => {
     e.preventDefault();
+    window.location.reload();
     changeStatus(2);
   };
 
   const rewardVolonter = async (e) => {
     e.preventDefault();
+    window.location.reload();
     changeStatus(4);
   };
 
   const waitVolonter = async (e) => {
     e.preventDefault();
+    window.location.reload();
     changeStatus(1);
   };
 

@@ -69,7 +69,9 @@ router.post("/postuserchangestate", async (req, res) => {
       if (!updatedDocument){
         return res.status(404).json('Failed to find and update');
       }
-      res.status(200).json("Updated");
+      else{
+        res.status(200).json("Updated");
+      }
     }
     else{
       res.status(404).json("Document doesn't exist");

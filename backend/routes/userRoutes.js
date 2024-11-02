@@ -5,9 +5,29 @@ const PostUser = require('../models/PostUser');
 const jwt = require('jsonwebtoken');
 const { tokenCheck } = require("./functions");
 require('dotenv').config();
-
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 const router = express.Router();
+
+
+// Multer setup
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage }); // ovo se koristi u post-u tamo gore
+
+// Ensure the uploads directory exists
+if (!fs.existsSync('uploads')) {
+  fs.mkdirSync('uploads');
+}
 
 
 // POST /register
@@ -99,6 +119,35 @@ router.get('/getUserPosts/:id', async (req, res) => {
     }
     posts.reverse();
     res.json(posts);
+  }
+});
+
+
+router.put("/updateUser", upload.single("photo"), async (req, res) => {
+  const newUserData = req.body;
+  if (req.file) newUserData.photo = req.file.path;
+  const decoded = tokenCheck(req, res, {});
+  if (decoded){
+    const updatedUser = await User.findByIdAndUpdate(newUserData._id,
+      {$set: {
+        name: newUserData.name,
+        city: newUserData.city,
+        description: newUserData.description,
+        email: newUserData.email,
+        phone: newUserData.phone,
+        photo: newUserData.photo
+      }},
+      {new: true, runValidators: true});
+    
+      if (!updatedUser){
+        return res.status(404).json('Failed to find and update');
+      }
+      else{
+        res.status(200).json("Updated");
+      }
+  }
+  else{
+    res.status(400).json("Bad token");
   }
 });
 

@@ -2,11 +2,9 @@ const express = require('express');
 const Post = require('../models/Post');
 const User = require('../models/User');
 const { tokenCheck } = require("./functions");
-const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-
 const router = express.Router();
 
 
@@ -20,12 +18,13 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage }); // ovo se koristi u post-u tamo gore
+const upload = multer({ storage: storage }); // ovo se koristi u post-u tamo gore
 
 // Ensure the uploads directory exists
 if (!fs.existsSync('uploads')) {
   fs.mkdirSync('uploads');
 }
+
 
 
 // Get All Posts
