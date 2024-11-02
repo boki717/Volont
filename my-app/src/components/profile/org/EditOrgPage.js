@@ -10,7 +10,7 @@ const api = axios.create({
   timeout: 5000,
 });
 
-const ProfilePage = () => {
+const EditOrgPage = () => {
   const token = localStorage.getItem("loginToken");
   const [thisUser, setThisUser] = useState({
     "photo": null,
@@ -117,4 +117,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default EditOrgPage;

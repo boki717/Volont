@@ -11,6 +11,7 @@ export async function isOrgCheck(setterFunc){
         const authStr = "Bearer ".concat(token);
         const response = await api.get('/orgcheck', {headers: {Authorization: authStr}});
         setterFunc(response.data.isOrg);
+        return response.data.isOrg;
     }
     catch (err) {
         console.log("error trying to get response for org check");

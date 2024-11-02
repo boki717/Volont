@@ -45,12 +45,14 @@ const PostDetailOrg = () => {
     }
   }
 
-  const changeStatus = async (new_st) => {
+  const changeStatus = async (new_st, clicked_id) => {
     // code for changeing status of userPost on backend and updating the page
     try{
       const authStr = "Bearer ".concat(token);
-      const resp = await api.post("postuserchangestate", {post_id: id, new_status: new_st},
+      const resp = await api.post("/postuserchangestate", {post_id: id, user_id: clicked_id, new_status: new_st},
         {headers: {Authorization: authStr}});
+      console.log(resp);
+      window.location.reload();
     }
     catch (err){
       console.log(err);
@@ -59,26 +61,20 @@ const PostDetailOrg = () => {
 
   const acceptVolonter = async (e) => {
     e.preventDefault();
-    window.location.reload();
     changeStatus(3);
+    window.location.reload();
   };
 
   const rejectVolonter = async (e) => {
     e.preventDefault();
-    window.location.reload();
-    changeStatus(2);
   };
 
   const rewardVolonter = async (e) => {
     e.preventDefault();
-    window.location.reload();
-    changeStatus(4);
   };
 
   const waitVolonter = async (e) => {
     e.preventDefault();
-    window.location.reload();
-    changeStatus(1);
   };
 
 
@@ -103,10 +99,10 @@ const PostDetailOrg = () => {
         waiting.map((user) => (
           <>
           <p>{user.name}</p>
-          <form onSubmit={acceptVolonter}>
+          <form onSubmit={(e) => {e.preventDefault(); changeStatus(3, user._id);}}>
             <button type="submit">Prihvati</button>
           </form>
-          <form onSubmit={rejectVolonter}>
+          <form onSubmit={(e) => {e.preventDefault(); changeStatus(2, user._id);}}>
             <button type="submit">Odbi</button>
           </form>
           </>
@@ -121,10 +117,10 @@ const PostDetailOrg = () => {
         accepted.map((user) => (
           <>
           <p>{user.name}</p>
-          <form onSubmit={rewardVolonter}>
+          <form onSubmit={(e) => {e.preventDefault(); changeStatus(4, user._id);}}>
             <button type="submit">Zavrsi</button>
           </form>
-          <form onSubmit={waitVolonter}>
+          <form onSubmit={(e) => {e.preventDefault(); changeStatus(1, user._id);}}>
             <button type="submit">Skloni</button>
           </form>
           </>

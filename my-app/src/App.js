@@ -11,6 +11,8 @@ import RegisterPage from './components/logreg/RegisterPage';
 import HomePage from './components/logreg/HomePage';
 import OrgPage from './components/profile/org/OrgPage'; // Import ProfilePage
 import EditOrgPage from './components/profile/org/EditOrgPage';
+import VolunteerPage from "./components/profile/volunteer/VolunteerPage";
+import EditVolunteerPage from "./components/profile/volunteer/editVolunteerPage";
 import './App.css';
 import BottomBar from './components/BottomBar';
 
@@ -25,7 +27,9 @@ function App() {
         <Route path="/post-form" element={<PostForm />} />
         <Route path="/post/:id" element={<><AppBar /><PostDetail /></>} />
         <Route path="/orgpost/:id" element={<PostDetailOrg />}/>
-        <Route path="/profile" element={<><AppBar /><OrgPage /></>} /> {/* Add route for ProfilePage */}
+        <Route path="/profile" element={<><AppBar /><VolunteerPage /></>} />
+        <Route path="/editprofile" element={<><AppBar /><EditVolunteerPage /></>} />
+        <Route path="/profileorg" element={<><AppBar /><OrgPage /></>} />
         <Route path="/editorg" element={<><AppBar /><EditOrgPage /></>} />
       </Routes>
     </Router>

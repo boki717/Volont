@@ -44,36 +44,39 @@ router.get("/getpostswithstatus", async (req, res) => {
     const q_ans = await PostUser.find({userId: decoded.userId});
     const posts = [];
     for (const pu of q_ans){
-        const elm = await PostUser.findById(pu.postId);
+        const elm = await Post.findById(pu.postId).lean();
         // status parameter is added to the usuall post object
+        // elm.status = pu.status;
         elm.status = pu.status;
         posts.push(elm);
     }
-    res.json(elm);
+    res.json(posts);
   }
 });
 
 
 router.post("/postuserchangestate", async (req, res) => {
   const post_id = req.body.post_id;
+  const user_id = req.body.user_id;
   const newStatus = req.body.new_status;
   const decoded = tokenCheck(req, res, {});
   if (decoded){
-    const exists = await PostUser.findOne({postId: post_id, userId: decoded.userId});
+    const exists = await PostUser.findOne({postId: post_id, userId: user_id});
     if (exists){
       const updatedDocument = await PostUser.findOneAndUpdate(
-        {postId: post_id, userId: decoded.userId},  // Query to match document
+        {postId: post_id, userId: user_id},  // Query to match document
         {$set: {status: newStatus}},                // Update operation
         {new: true, runValidators: true}            // Options: return updated doc and run validation
       );
       if (!updatedDocument){
-        return res.status(404).json('Failed to find and update');
+        res.status(404).json('Failed to find and update');
       }
       else{
         res.status(200).json("Updated");
       }
     }
     else{
+      console.log("document doesn't exist");
       res.status(404).json("Document doesn't exist");
     }
   }

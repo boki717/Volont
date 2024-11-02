@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isOrgCheck } from './functions';
 import './AppBar.css'; // For styling
 
 const AppBar = () => {
@@ -21,7 +22,16 @@ const AppBar = () => {
   };
 
   const handleProfilePageClick = () => {
-    navigate('/profile'); // Redirect to Profile page
+    const fetchData = async () => {
+      const isOrg = await isOrgCheck(() => {});
+      if (isOrg === 1){
+        navigate('/profileorg');
+      }
+      else{
+        navigate('/profile'); // Redirect to Profile page
+      }
+    }
+    fetchData();
   };
 
   return (
