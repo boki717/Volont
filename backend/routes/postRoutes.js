@@ -50,9 +50,12 @@ router.post('/newpost', upload.array("photos", 10), async (req, res) => {
   const decoded = tokenCheck(req, res, {});
   if (decoded){
     if (decoded.isOrg === 1){
-      const { title, date, description, participants } = req.body;
+      const { title, date, description, participants, location } = req.body;
       const photos = req.files.map(file => file.path);
-      const newPost = new Post({ title, date, description, photos, participants });
+      const authorUser = await User.findById(decoded.userId);
+      const author = authorUser.name;
+      const authorId = decoded.userId;
+      const newPost = new Post({ title, date, description, photos, participants, author, authorId, location });
       await newPost.save();
       const updated = await User.findByIdAndUpdate(decoded.userId,
         { $push: {events: newPost._id}},

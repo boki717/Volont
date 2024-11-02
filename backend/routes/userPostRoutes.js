@@ -12,7 +12,7 @@ router.post("/makepostuser/:post_id", async (req, res) => {
   const decoded = tokenCheck(req, res, {});
   if (decoded){
     const exists = await PostUser.findOne({postId: post_id, userId: decoded.userId});
-    if (!exists){
+    if (!exists && decoded.isOrg === 0){
       const newPostUser = new PostUser({
         postId: post_id,
         userId: decoded.userId,
@@ -62,9 +62,9 @@ router.post("/postuserchangestate", async (req, res) => {
     const exists = await PostUser.findOne({postId: post_id, userId: decoded.userId});
     if (exists){
       const updatedDocument = await PostUser.findOneAndUpdate(
-        {postId: post_id, userId: decoded.userId}, // Query to match document
-        {$set: {status: newStatus}},              // Update operation
-        {new: true, runValidators: true}                       // Options: return updated doc and run validation
+        {postId: post_id, userId: decoded.userId},  // Query to match document
+        {$set: {status: newStatus}},                // Update operation
+        {new: true, runValidators: true}            // Options: return updated doc and run validation
       );
       if (!updatedDocument){
         return res.status(404).json('Failed to find and update');
@@ -79,5 +79,42 @@ router.post("/postuserchangestate", async (req, res) => {
     res.status(401).json("No logged in user");
   }
 });
+
+
+router.get("/checkapplied/:post_id", async (req, res) => {
+  const post_id = req.params.post_id;
+  const decoded = tokenCheck(req, res, {applied: 0});
+  if (decoded){
+    const exists = await PostUser.findOne({postId: post_id, userId: decoded.userId});
+    if (exists){
+      res.status(200).json({applied: 1});
+    } 
+    else{
+      res.status(200).json({applied: 0});
+    }
+  }
+  else{
+    res.status(400).json({applied: 0});
+  }
+});
+
+
+router.delete("/deletepostuser/:post_id", async (req, res) => {
+  const post_id = req.params.post_id;
+  const decoded = tokenCheck(req, res, {});
+  if (decoded){
+    const deletedDocument = await PostUser.findOneAndDelete({postId: post_id, userId: decoded.userId});
+    if (!deletedDocument) {
+      return res.status(404).json("Document not found");
+    }
+    else{
+      res.status(200).json("Done");
+    }
+  }
+  else{
+    res.status(400).json("Bad token");
+  }
+});
+
 
 module.exports = router;

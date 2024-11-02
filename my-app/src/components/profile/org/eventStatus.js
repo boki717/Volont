@@ -18,7 +18,10 @@ const PostDetailOrg = () => {
     "description": "x",
      "date": null,
      "participants": 0,
-     "datePosted": null
+     "datePosted": null,
+     "author": "x",
+     "authorId": null,
+     "location": "x"
   });
   const [waiting, setWaiting] = useState([]);
   const [accepted, setAccepted] = useState([]);
@@ -86,8 +89,10 @@ const PostDetailOrg = () => {
     <>
       <p>{currentPost.title}</p>
       <p>{currentPost.description}</p>
-      <p>{currentPost.date}</p>
-      <p>{currentPost.datePosted}</p>
+      <p>{new Date(currentPost.date).toLocaleDateString()}</p>
+      <p>{currentPost.location}</p>
+      <p>{new Date(currentPost.datePosted).toLocaleDateString()}</p>
+      <p>{currentPost.author}</p>
       <p>Prijavljeni:</p>
 
       {waiting.length > 0 ? (
@@ -101,7 +106,7 @@ const PostDetailOrg = () => {
             <button type="submit">Odbi</button>
           </form>
           </>
-          
+
         ))
       ) : (
         <p>Nema prijavljenih volontera.</p>

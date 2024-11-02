@@ -2,7 +2,7 @@
 import React from 'react';
 import './Post.css'; // Add any styles you need
 
-const Post = ({ title, date, description, photos, participants }) => {
+const Post = ({ title, date, location, photos, participants }) => {
   return (
     <div className="post">
       <div className="header">
@@ -25,7 +25,7 @@ const Post = ({ title, date, description, photos, participants }) => {
           <div>👤</div>
         </div>
         <div className='info'>
-            <div>lokacija</div>
+            <div>{location}</div>
             <div>{new Date(date).toLocaleDateString()}</div>
             <div>Broj potrebnih volontera: {participants}</div>
         </div>

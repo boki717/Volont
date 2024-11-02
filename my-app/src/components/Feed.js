@@ -48,7 +48,7 @@ const Feed = () => {
               <Post
                 title={post.title}
                 date={post.date}
-                description={post.description}
+                location={post.location}
                 photos={post.photos} // Ensure this is a URL or base64 string
                 participants={post.participants}
               />
