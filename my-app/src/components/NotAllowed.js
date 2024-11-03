@@ -5,7 +5,7 @@ export default function NotLoggedIn(){
     const navigate = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
-        navigate('/');
+        navigate('/home');
       };
     return (
         <>

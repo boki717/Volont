@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const User = require('../models/User'); // Ensure this path is correct
 const Post = require('../models/Post');
 const PostUser = require('../models/PostUser');
@@ -93,32 +94,52 @@ router.get("/isloggedin", async (req, res) => {
 router.get("/getloggedinuser", async (req, res) => {
   const decoded = tokenCheck(req, res, { userData: {} });
   if (decoded){
-    const user = await User.findById(decoded.userId);
-    res.json(user);
+    try{
+      const user = await User.findById(decoded.userId);
+      res.json(user);
+    }
+    catch (err){
+      res.json({});
+    }
   }
 });
 
 router.get("/getuser/:id", async (req, res) => {
   const user_id = req.params.id;
-  const user = await User.findById(user_id);
-  res.json(user);
+  try{
+    if (mongoose.Types.ObjectId.isValid(user_id)){
+      const user = await User.findById(user_id);
+      res.json(user);
+    }
+    else{
+      res.json({});
+    }
+  }
+  catch (err){
+    res.json({});
+  }
 });
 
 
-// make a rout that will return all posts that user signed up for only based on token
+// make a route that will return all posts that user signed up for only based on token
 router.get('/getUserPosts/:id', async (req, res) => {
   const user_id = req.params.id;
-  if (user_id.length != 24){
-    res.json([]);
-  }
-  else{
-    const posts = [];
-    const user = await User.findById(user_id);
-    for (const postId of user.events){
-      posts.push(await Post.findById(postId));
+  try{
+    if (!mongoose.Types.ObjectId.isValid(user_id)){
+      res.json([]);
     }
-    posts.reverse();
-    res.json(posts);
+    else{
+      const posts = [];
+      const user = await User.findById(user_id);
+      for (const postId of user.events){
+        posts.push(await Post.findById(postId));
+      }
+      posts.reverse();
+      res.json(posts);
+    }
+  }
+  catch (err){
+    res.json([]);
   }
 });
 
@@ -128,7 +149,8 @@ router.put("/updateUser", upload.single("photo"), async (req, res) => {
   if (req.file) newUserData.photo = req.file.path;
   const decoded = tokenCheck(req, res, {});
   if (decoded){
-    const updatedUser = await User.findByIdAndUpdate(newUserData._id,
+    try{
+      const updatedUser = await User.findByIdAndUpdate(newUserData._id,
       {$set: {
         name: newUserData.name,
         city: newUserData.city,
@@ -140,14 +162,15 @@ router.put("/updateUser", upload.single("photo"), async (req, res) => {
       {new: true, runValidators: true});
     
       if (!updatedUser){
-        return res.status(404).json('Failed to find and update');
+        res.json('Failed to find and update');  // maybe this can break things
       }
       else{
         res.status(200).json("Updated");
       }
-  }
-  else{
-    res.status(400).json("Bad token");
+    }
+    catch (err){
+      res.json("Query failed");
+    }
   }
 });
 

@@ -4,6 +4,7 @@ import { isOrgCheck } from './functions';
 import './AppBar.css'; // For styling
 
 const AppBar = () => {
+  const token = localStorage.getItem("loginToken");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -14,7 +15,11 @@ const AppBar = () => {
   const handleLogout = () => {
     // Perform any necessary logout logic here (e.g., clearing auth tokens)
     localStorage.removeItem("loginToken");
-    navigate('/'); // Redirect to home page
+    navigate('/home'); // Redirect to home page
+  };
+
+  const handleLogin = () => {
+    navigate('/home'); // Redirect to home page
   };
 
   const handleHomeClick = () => {
@@ -44,9 +49,11 @@ const AppBar = () => {
         <img src="./profile.png" alt="Profile" className="profile-icon" />
         {isDropdownOpen && (
           <div className="dropdown-menu">
+            {token ? <button onClick={handleProfilePageClick} className="dropdown-button">Profile</button> : <></>}
             <button onClick={handleHomeClick} className="dropdown-button">Home</button>
-            <button onClick={handleProfilePageClick} className="dropdown-button">Profile</button>
-            <button onClick={handleLogout} className="dropdown-button">Logout</button>
+            {token ? <button onClick={handleLogout} className="dropdown-button">Logout</button> :
+            <button onClick={handleLogin} className="dropdown-button">Login</button>}
+            
           </div>
         )}
       </div>

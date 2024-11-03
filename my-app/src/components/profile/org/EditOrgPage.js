@@ -4,6 +4,7 @@ import  { useEffect }  from 'react';
 import './OrgPage.css'; // Add styles as needed
 import axios from 'axios';
 import NotLoggedIn from "../../NotAllowed";
+import { useNavigate } from 'react-router-dom';
 
 const api = axios.create({
   baseURL: 'http://localhost:5000/api',
@@ -11,6 +12,7 @@ const api = axios.create({
 });
 
 const EditOrgPage = () => {
+  const navigate = useNavigate();
   const token = localStorage.getItem("loginToken");
   const [thisUser, setThisUser] = useState({
     "photo": null,
@@ -44,6 +46,7 @@ const EditOrgPage = () => {
       const authStr = "Bearer ".concat(token);
       const response = await api.put('/updateUser', formData, {headers: {Authorization: authStr}});
       console.log(response);
+      navigate('/profileorg');
     }
     catch (err){
       console.log(err);
@@ -68,7 +71,7 @@ const EditOrgPage = () => {
           onChange={(e) => updateUser("photo", e.target.files[0])}
         />
         <label>
-          Ime i Prezime:
+          Naziv:
           <input 
             type="text" 
             value={thisUser.name}
@@ -82,7 +85,6 @@ const EditOrgPage = () => {
             type="text" 
             value={thisUser.city} 
             onChange={(e) => updateUser("city", e.target.value)}
-            required 
           />
         </label>
         <label>
@@ -90,7 +92,6 @@ const EditOrgPage = () => {
           <textarea 
             value={thisUser.description} 
             onChange={(e) => updateUser("description", e.target.value)} 
-            required
           />
         </label>
         <label>
@@ -108,7 +109,6 @@ const EditOrgPage = () => {
             type="text" 
             value={thisUser.phone} 
             onChange={(e) => updateUser("phone", e.target.value)} 
-            required
           />
         </label>
         <button type="submit">Sacuvaj promene</button>

@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import NotLoggedIn from "../../NotAllowed";
 import axios from 'axios';
 import  { useEffect }  from 'react';
+import { isOrgCheck } from '../../functions';
 
 
 const api = axios.create({
@@ -25,6 +28,7 @@ const PostDetailOrg = () => {
   });
   const [waiting, setWaiting] = useState([]);
   const [accepted, setAccepted] = useState([]);
+  const [ isOrg, setIsOrg ] = useState(0);
   // const token = localStorage.getItem("loginToken");
 
   const getPost = async () => {
@@ -59,33 +63,16 @@ const PostDetailOrg = () => {
     }
   }
 
-  const acceptVolonter = async (e) => {
-    e.preventDefault();
-    changeStatus(3);
-    window.location.reload();
-  };
-
-  const rejectVolonter = async (e) => {
-    e.preventDefault();
-  };
-
-  const rewardVolonter = async (e) => {
-    e.preventDefault();
-  };
-
-  const waitVolonter = async (e) => {
-    e.preventDefault();
-  };
-
-
   useEffect(() => {
     const fetchData = async () => {
+        await isOrgCheck(setIsOrg);
         await getPost();
     }
     fetchData();
   }, []);
 
   return (
+    (isOrg === 1) ? (
     <>
       <p>{currentPost.title}</p>
       <p>{currentPost.description}</p>
@@ -98,7 +85,9 @@ const PostDetailOrg = () => {
       {waiting.length > 0 ? (
         waiting.map((user) => (
           <>
-          <p>{user.name}</p>
+          <Link to={`/volunteerview/${user._id}`}>
+            <p>{user.name}</p>
+          </Link>
           <form onSubmit={(e) => {e.preventDefault(); changeStatus(3, user._id);}}>
             <button type="submit">Prihvati</button>
           </form>
@@ -116,7 +105,9 @@ const PostDetailOrg = () => {
       {accepted.length > 0 ? (
         accepted.map((user) => (
           <>
-          <p>{user.name}</p>
+          <Link to={`/volunteerview/${user._id}`}>
+            <p>{user.name}</p>
+          </Link>
           <form onSubmit={(e) => {e.preventDefault(); changeStatus(4, user._id);}}>
             <button type="submit">Zavrsi</button>
           </form>
@@ -129,7 +120,7 @@ const PostDetailOrg = () => {
         <p>Nema prihvacenih volontera.</p>
       )}
     </>
-  );
+  ) : (<NotLoggedIn/>));
 };
 
 export default PostDetailOrg;

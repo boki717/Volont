@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import  { useEffect }  from 'react';
 import axios from 'axios';
 import NotLoggedIn from "../../NotAllowed";
+import { useNavigate } from 'react-router-dom';
 
 const api = axios.create({
   baseURL: 'http://localhost:5000/api',
@@ -9,6 +10,7 @@ const api = axios.create({
 });
 
 const EditVolunteerPage = () => {
+  const navigate = useNavigate();
   const token = localStorage.getItem("loginToken");
   const [thisUser, setThisUser] = useState({
     "photo": null,
@@ -42,6 +44,7 @@ const EditVolunteerPage = () => {
       const authStr = "Bearer ".concat(token);
       const response = await api.put('/updateUser', formData, {headers: {Authorization: authStr}});
       console.log(response);
+      navigate('/profile');
     }
     catch (err){
       console.log(err);
@@ -80,7 +83,6 @@ const EditVolunteerPage = () => {
             type="text" 
             value={thisUser.city} 
             onChange={(e) => updateUser("city", e.target.value)}
-            required 
           />
         </label>
         <label>
@@ -88,7 +90,6 @@ const EditVolunteerPage = () => {
           <textarea 
             value={thisUser.description} 
             onChange={(e) => updateUser("description", e.target.value)} 
-            required
           />
         </label>
         <label>
@@ -106,7 +107,6 @@ const EditVolunteerPage = () => {
             type="text" 
             value={thisUser.phone} 
             onChange={(e) => updateUser("phone", e.target.value)} 
-            required
           />
         </label>
         <button type="submit">Sacuvaj promene</button>

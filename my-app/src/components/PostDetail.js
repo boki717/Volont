@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './PostDetails.css'; // Ensure this matches your file name
 import  { useEffect }  from 'react';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { isOrgCheck } from './functions';
 import axios from 'axios';
 
@@ -26,26 +27,6 @@ const PostDetail = () => {
     "location": ""
   });
   const token = localStorage.getItem("loginToken");
-
-  /*
-  // Stuff for making postUser for testing
-  const doStuff = async () => {
-    try {
-      const authStr = "Bearer ".concat(token);
-      const response = await api.post(`/makepostuser/${id}`, {}, {headers: {Authorization: authStr}});
-      console.log(response);
-    } catch (err) {
-      console.log("error trying to get user data");
-    }
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await doStuff();
-    }
-    fetchData();
-  }, []);
-  */
 
   const loadPost = async () => {
     try{
@@ -77,6 +58,7 @@ const PostDetail = () => {
     } catch (err) {
       console.log("error trying to apply to event");
     }
+    window.location.reload();
   }
 
   const giveUp = async (e) => {
@@ -88,6 +70,7 @@ const PostDetail = () => {
     } catch (err) {
       console.log("error trying to give up from event");
     }
+    window.location.reload();
   }
 
   useEffect(() => {
@@ -102,7 +85,7 @@ const PostDetail = () => {
   return (
     <>
     <p>{new Date(postData.datePosted).toLocaleDateString()}</p>
-    <p>{postData.author}</p>
+    <Link to={`/orgview/${postData.authorId}`}><p>{postData.author}</p></Link>
     <p>{postData.title}</p>
     <p>{postData.description}</p>
     <p>{new Date(postData.date).toLocaleDateString()}</p>

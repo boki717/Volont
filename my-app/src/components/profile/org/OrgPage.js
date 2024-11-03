@@ -64,7 +64,7 @@ const OrgPage = () => {
       {thisUser.name }
       </div>
       <label htmlFor="name" style={{ fontWeight: 'bold' }} label>
-        Status
+        Opis
       </label>  
       <div className='status' div>
       { thisUser.description }

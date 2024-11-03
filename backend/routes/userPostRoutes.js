@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const Post = require('../models/Post');
 const User = require('../models/User');
 const PostUser = require('../models/PostUser');
@@ -9,48 +10,77 @@ const router = express.Router();
 
 router.post("/makepostuser/:post_id", async (req, res) => {
   const post_id = req.params.post_id;
-  const decoded = tokenCheck(req, res, {});
-  if (decoded){
-    const exists = await PostUser.findOne({postId: post_id, userId: decoded.userId});
-    if (!exists && decoded.isOrg === 0){
-      const newPostUser = new PostUser({
-        postId: post_id,
-        userId: decoded.userId,
-        status: 1});
-      newPostUser.save();
-      res.status(200);
+  try{
+    if (mongoose.Types.ObjectId.isValid(post_id)){
+      const decoded = tokenCheck(req, res, {});
+      if (decoded){
+        const exists = await PostUser.findOne({postId: post_id, userId: decoded.userId});
+        if (!exists && decoded.isOrg === 0){
+          const newPostUser = new PostUser({
+            postId: post_id,
+            userId: decoded.userId,
+            status: 1});
+          newPostUser.save();
+          res.status(200);
+        }
+        else{
+            res.status(400);
+        }
+      }
     }
     else{
-        res.status(400);
+      res.json({});
     }
+  }
+  catch (err){
+    res.json({});
   }
 });
 
 
 router.get("/geteventvolonters", async (req, res) => {
   const { post_id, status } = req.query;
-  const q_ans = await PostUser.find({postId: post_id, status: status});
-  const volonters = [];
-  for (const pu of q_ans){
-    volonters.push(await User.findById(pu.userId));
+  try{
+    if (mongoose.Types.ObjectId.isValid(post_id)){
+      const q_ans = await PostUser.find({postId: post_id, status: status});
+      const volonters = [];
+      for (const pu of q_ans){
+        volonters.push(await User.findById(pu.userId));
+      }
+      res.json(volonters);
+    }
+    else{
+      res.json([]);
+    }
   }
-  res.json(volonters);
+  catch (err){
+    res.json([]);
+  }
 });
 
 
 router.get("/getpostswithstatus", async (req, res) => {
   const decoded = tokenCheck(req, res, {});
   if (decoded){
-    const q_ans = await PostUser.find({userId: decoded.userId});
-    const posts = [];
-    for (const pu of q_ans){
-        const elm = await Post.findById(pu.postId).lean();
-        // status parameter is added to the usuall post object
-        // elm.status = pu.status;
-        elm.status = pu.status;
-        posts.push(elm);
+    if (decoded.isOrg === 0){
+      try{
+        const q_ans = await PostUser.find({userId: decoded.userId});
+        const posts = [];
+        for (const pu of q_ans){
+            const elm = await Post.findById(pu.postId).lean();
+            // status parameter is added to the usuall post object
+            elm.status = pu.status;
+            posts.push(elm);
+        }
+        res.json(posts);
+      }
+      catch (err){
+        res.json([]);
+      }
     }
-    res.json(posts);
+    else{
+      res.json([]);
+    }
   }
 });
 
@@ -58,66 +88,86 @@ router.get("/getpostswithstatus", async (req, res) => {
 router.post("/postuserchangestate", async (req, res) => {
   const post_id = req.body.post_id;
   const user_id = req.body.user_id;
-  const newStatus = req.body.new_status;
-  const decoded = tokenCheck(req, res, {});
-  if (decoded){
-    const exists = await PostUser.findOne({postId: post_id, userId: user_id});
-    if (exists){
-      const updatedDocument = await PostUser.findOneAndUpdate(
-        {postId: post_id, userId: user_id},  // Query to match document
-        {$set: {status: newStatus}},                // Update operation
-        {new: true, runValidators: true}            // Options: return updated doc and run validation
-      );
-      if (!updatedDocument){
-        res.status(404).json('Failed to find and update');
-      }
-      else{
-        res.status(200).json("Updated");
+  try{
+    if (mongoose.Types.ObjectId.isValid(user_id) && mongoose.Types.ObjectId.isValid(post_id)){
+      const newStatus = req.body.new_status;
+      const decoded = tokenCheck(req, res, {});
+      if (decoded){
+        const exists = await PostUser.findOne({postId: post_id, userId: user_id});
+        if (exists){
+          const updatedDocument = await PostUser.findOneAndUpdate(
+            {postId: post_id, userId: user_id},  // Query to match document
+            {$set: {status: newStatus}},         // Update operation
+            {new: true, runValidators: true}     // Options: return updated doc and run validation
+          );
+          if (!updatedDocument){
+            res.status(404).json('Failed to find and update');
+          }
+          else{
+            res.status(200).json("Updated");
+          }
+        }
+        else{
+          res.json("Document doesn't exist");
+        }
       }
     }
     else{
-      console.log("document doesn't exist");
-      res.status(404).json("Document doesn't exist");
+      res.json("Not every id was valid");
     }
   }
-  else{
-    res.status(401).json("No logged in user");
+  catch (err){
+    res.json("Querry error");
   }
 });
 
 
 router.get("/checkapplied/:post_id", async (req, res) => {
   const post_id = req.params.post_id;
-  const decoded = tokenCheck(req, res, {applied: 0});
-  if (decoded){
-    const exists = await PostUser.findOne({postId: post_id, userId: decoded.userId});
-    if (exists){
-      res.status(200).json({applied: 1});
-    } 
+  try{
+    if (mongoose.Types.ObjectId.isValid(post_id)){
+      const decoded = tokenCheck(req, res, {applied: 0});
+      if (decoded){
+        const exists = await PostUser.findOne({postId: post_id, userId: decoded.userId});
+        if (exists){
+          res.status(200).json({applied: 1});
+        } 
+        else{
+          res.status(200).json({applied: 0});
+        }
+      }
+    }
     else{
-      res.status(200).json({applied: 0});
+      res.json({applied: 0});
     }
   }
-  else{
-    res.status(400).json({applied: 0});
+  catch (err){
+    res.json({applied: 0});
   }
 });
 
 
 router.delete("/deletepostuser/:post_id", async (req, res) => {
   const post_id = req.params.post_id;
-  const decoded = tokenCheck(req, res, {});
-  if (decoded){
-    const deletedDocument = await PostUser.findOneAndDelete({postId: post_id, userId: decoded.userId});
-    if (!deletedDocument) {
-      return res.status(404).json("Document not found");
+  try{
+    if (mongoose.Types.ObjectId.isValid(post_id)){
+      const decoded = tokenCheck(req, res, {});
+      if (decoded){
+        const deletedDocument = await PostUser.findOneAndDelete({postId: post_id, userId: decoded.userId});
+        if (!deletedDocument) {
+          return res.status(404).json("Document not found");
+        }
+        else{
+          res.status(200).json("Done");
+        }
+      }
     }
     else{
-      res.status(200).json("Done");
+      res.json("Post id not valid");
     }
   }
-  else{
-    res.status(400).json("Bad token");
+  catch (err){
+    res.json("Querry error");
   }
 });
 

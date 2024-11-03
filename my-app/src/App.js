@@ -1,6 +1,6 @@
 // src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AppBar from './components/AppBar';
 import Feed from './components/Feed';
 import PostForm from './components/PostForm';
@@ -13,6 +13,8 @@ import OrgPage from './components/profile/org/OrgPage'; // Import ProfilePage
 import EditOrgPage from './components/profile/org/EditOrgPage';
 import VolunteerPage from "./components/profile/volunteer/VolunteerPage";
 import EditVolunteerPage from "./components/profile/volunteer/editVolunteerPage";
+import OrgView from "./components/profile/org/orgView";
+import VolunteerView from "./components/profile/volunteer/volunteerView";
 import './App.css';
 import BottomBar from './components/BottomBar';
 
@@ -20,13 +22,16 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<><AppBar /><Feed /><BottomBar/></>}/>
+        <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/feed" element={<><AppBar /><Feed /><BottomBar/></>} />
         <Route path="/post-form" element={<PostForm />} />
         <Route path="/post/:id" element={<><AppBar /><PostDetail /></>} />
         <Route path="/orgpost/:id" element={<PostDetailOrg />}/>
+        <Route path="/volunteerview/:id" element={<><AppBar /><VolunteerView /></>} />
+        <Route path="/orgview/:id" element={<><AppBar /><OrgView /></>} />
         <Route path="/profile" element={<><AppBar /><VolunteerPage /></>} />
         <Route path="/editprofile" element={<><AppBar /><EditVolunteerPage /></>} />
         <Route path="/profileorg" element={<><AppBar /><OrgPage /></>} />
@@ -35,12 +40,5 @@ function App() {
     </Router>
   );
 }
-
-const ConditionalAppBar = () => {
-  const location = useLocation();
-  const shouldShowAppBar = location.pathname.startsWith('/feed') || location.pathname.startsWith('/post');
-
-  return shouldShowAppBar ? <AppBar /> : null;
-};
 
 export default App;

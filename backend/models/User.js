@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    default: "Volonter"
+    default: ""
   },
   organization: {  // 1 means that user is an organization
     type: Number,
